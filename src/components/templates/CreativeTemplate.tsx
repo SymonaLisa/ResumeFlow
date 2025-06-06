@@ -4,9 +4,10 @@ import { Mail, Phone, MapPin, Globe, Linkedin, Github } from 'lucide-react';
 
 interface CreativeTemplateProps {
   preview?: boolean;
+  forExport?: boolean;
 }
 
-const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ preview = false }) => {
+const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ preview = false, forExport = false }) => {
   const { resumeData } = useResume();
   const { personalInfo, experience, education, skills, certifications, languages, projects } = resumeData;
   
@@ -81,8 +82,12 @@ const CreativeTemplate: React.FC<CreativeTemplateProps> = ({ preview = false }) 
     );
   }
   
+  const containerClass = forExport 
+    ? "bg-white min-h-screen" 
+    : "bg-white";
+  
   return (
-    <div className="bg-white">
+    <div className={containerClass}>
       <div className="grid grid-cols-12">
         <div className="col-span-12 md:col-span-4 bg-purple-800 text-white md:min-h-screen p-6">
           <div className="mb-8 text-center">

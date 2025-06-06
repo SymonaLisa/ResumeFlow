@@ -4,9 +4,10 @@ import { Mail, Phone, MapPin, Globe, Linkedin, Github } from 'lucide-react';
 
 interface ProfessionalTemplateProps {
   preview?: boolean;
+  forExport?: boolean;
 }
 
-const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ preview = false }) => {
+const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ preview = false, forExport = false }) => {
   const { resumeData } = useResume();
   const { personalInfo, experience, education, skills, certifications, languages, projects } = resumeData;
   
@@ -64,8 +65,12 @@ const ProfessionalTemplate: React.FC<ProfessionalTemplateProps> = ({ preview = f
     );
   }
   
+  const containerClass = forExport 
+    ? "bg-white p-8 max-w-4xl mx-auto min-h-screen" 
+    : "bg-white p-8 max-w-4xl mx-auto";
+  
   return (
-    <div className="bg-white p-8 max-w-4xl mx-auto">
+    <div className={containerClass}>
       <div className="text-center mb-6 border-b-2 border-gray-300 pb-4">
         <h1 className="text-3xl font-bold text-gray-900">{personalInfo.firstName} {personalInfo.lastName}</h1>
         <p className="text-xl text-gray-700 mb-4">{personalInfo.jobTitle}</p>

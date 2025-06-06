@@ -4,15 +4,16 @@ import { Mail, Phone, MapPin, Globe, Linkedin, Github } from 'lucide-react';
 
 interface ModernTemplateProps {
   preview?: boolean;
+  forExport?: boolean;
 }
 
-const ModernTemplate: React.FC<ModernTemplateProps> = ({ preview = false }) => {
+const ModernTemplate: React.FC<ModernTemplateProps> = ({ preview = false, forExport = false }) => {
   const { resumeData } = useResume();
   const { personalInfo, experience, education, skills, certifications, languages, projects } = resumeData;
   
   if (preview) {
     return (
-      <div className="scale-[0.4] origin-top-left transform w-[250%] h-[250%] bg-white p-8">
+      <div className="scale-[0.4] origin-top-left transform w-[250%] h-[250%] bg-white">
         <div className="bg-blue-900 text-white p-6 rounded-t-md">
           <h1 className="text-3xl font-bold mb-1">John Doe</h1>
           <p className="text-xl mb-4">Senior Software Engineer</p>
@@ -64,8 +65,12 @@ const ModernTemplate: React.FC<ModernTemplateProps> = ({ preview = false }) => {
     );
   }
   
+  const containerClass = forExport 
+    ? "bg-white p-8 max-w-4xl mx-auto min-h-screen" 
+    : "bg-white p-8 max-w-4xl mx-auto";
+  
   return (
-    <div className="bg-white p-8 max-w-4xl mx-auto">
+    <div className={containerClass}>
       <div className="bg-blue-900 text-white p-6 rounded-t-md">
         <h1 className="text-3xl font-bold mb-1">{personalInfo.firstName} {personalInfo.lastName}</h1>
         <p className="text-xl mb-4">{personalInfo.jobTitle}</p>

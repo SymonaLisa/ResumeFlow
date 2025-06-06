@@ -2,25 +2,58 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useResume } from '../contexts/ResumeContext';
 import { ArrowLeft, Download, File as FilePdf, FileText, File } from 'lucide-react';
+import { exportResumeAsPDF } from '../utils/pdfExport';
+import ModernTemplate from '../components/templates/ModernTemplate';
+import ProfessionalTemplate from '../components/templates/ProfessionalTemplate';
+import CreativeTemplate from '../components/templates/CreativeTemplate';
 
 const Export: React.FC = () => {
-  const { selectedTemplate } = useResume();
+  const { selectedTemplate, resumeData } = useResume();
   const navigate = useNavigate();
   const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
   
   const handleBack = () => {
     navigate('/preview');
   };
   
-  const handleExport = (format: string) => {
+  const handleExportPDF = async () => {
     setExporting(true);
+    setExportError(null);
     
-    // Simulate export process
-    setTimeout(() => {
+    try {
+      await exportResumeAsPDF(resumeData, selectedTemplate);
+    } catch (error) {
+      console.error('Export error:', error);
+      setExportError('Failed to export PDF. Please try again.');
+    } finally {
       setExporting(false);
-      // In a real application, this would trigger the actual export
-      alert(`Resume exported as ${format.toUpperCase()} successfully!`);
-    }, 1500);
+    }
+  };
+  
+  const handleExport = (format: string) => {
+    if (format === 'pdf') {
+      handleExportPDF();
+    } else {
+      setExporting(true);
+      setTimeout(() => {
+        setExporting(false);
+        alert(`${format.toUpperCase()} export coming soon!`);
+      }, 1000);
+    }
+  };
+  
+  const renderTemplate = () => {
+    switch (selectedTemplate) {
+      case 'modern':
+        return <ModernTemplate forExport={true} />;
+      case 'professional':
+        return <ProfessionalTemplate forExport={true} />;
+      case 'creative':
+        return <CreativeTemplate forExport={true} />;
+      default:
+        return <ModernTemplate forExport={true} />;
+    }
   };
   
   return (
@@ -30,6 +63,21 @@ const Export: React.FC = () => {
         <p className="text-gray-600 mb-10">
           Your resume is ready! Choose your preferred format to download.
         </p>
+        
+        {exportError && (
+          <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-800">{exportError}</p>
+              </div>
+            </div>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <ExportCard 
@@ -61,6 +109,11 @@ const Export: React.FC = () => {
           />
         </div>
         
+        {/* Hidden resume for PDF export */}
+        <div id="resume-preview" className="hidden">
+          {renderTemplate()}
+        </div>
+        
         <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-md mb-10">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -70,7 +123,7 @@ const Export: React.FC = () => {
             </div>
             <div className="ml-3">
               <p className="text-sm text-blue-800">
-                In the full version, you'll be able to export in multiple formats including DOCX and HTML.
+                PDF export is fully functional! DOCX and HTML formats will be available in future updates.
               </p>
             </div>
           </div>
@@ -141,8 +194,8 @@ const ExportCard: React.FC<ExportCardProps> = ({
             } transition-colors duration-300`}
           >
             {loading ? (
-              <svg className="animate-spin h-5 w-5 mr-2\" xmlns="http://www.w3.org/2000/svg\" fill="none\" viewBox="0 0 24 24">
-                <circle className="opacity-25\" cx="12\" cy="12\" r="10\" stroke="currentColor\" strokeWidth="4"></circle>
+              <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             ) : (

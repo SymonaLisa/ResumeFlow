@@ -24,13 +24,13 @@ const Preview: React.FC = () => {
   const renderTemplate = () => {
     switch (selectedTemplate) {
       case 'modern':
-        return <ModernTemplate />;
+        return <ModernTemplate forExport={false} />;
       case 'professional':
-        return <ProfessionalTemplate />;
+        return <ProfessionalTemplate forExport={false} />;
       case 'creative':
-        return <CreativeTemplate />;
+        return <CreativeTemplate forExport={false} />;
       default:
-        return <ModernTemplate />;
+        return <ModernTemplate forExport={false} />;
     }
   };
   
@@ -90,7 +90,7 @@ const Preview: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-900">Resume Preview</h2>
               {renderAtsScore()}
             </div>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
+            <div id="resume-preview" className="border border-gray-200 rounded-lg overflow-hidden">
               {renderTemplate()}
             </div>
           </div>
