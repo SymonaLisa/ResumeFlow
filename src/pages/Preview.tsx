@@ -5,6 +5,10 @@ import { ArrowLeft, ArrowRight, FileText, CheckCircle, AlertCircle } from 'lucid
 import ModernTemplate from '../components/templates/ModernTemplate';
 import ProfessionalTemplate from '../components/templates/ProfessionalTemplate';
 import CreativeTemplate from '../components/templates/CreativeTemplate';
+import MinimalistTemplate from '../components/templates/MinimalistTemplate';
+import ExecutiveTemplate from '../components/templates/ExecutiveTemplate';
+import TechTemplate from '../components/templates/TechTemplate';
+import AcademicTemplate from '../components/templates/AcademicTemplate';
 import JobMatchAnalyzer from '../components/tools/JobMatchAnalyzer';
 import AtsChecker from '../components/tools/AtsChecker';
 
@@ -29,6 +33,14 @@ const Preview: React.FC = () => {
         return <ProfessionalTemplate forExport={false} />;
       case 'creative':
         return <CreativeTemplate forExport={false} />;
+      case 'minimalist':
+        return <MinimalistTemplate forExport={false} />;
+      case 'executive':
+        return <ExecutiveTemplate forExport={false} />;
+      case 'tech':
+        return <TechTemplate forExport={false} />;
+      case 'academic':
+        return <AcademicTemplate forExport={false} />;
       default:
         return <ModernTemplate forExport={false} />;
     }
